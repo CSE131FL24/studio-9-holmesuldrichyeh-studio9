@@ -11,6 +11,7 @@ public class Polynomial {
 	 */
 	public Polynomial() {
 		//FIXME
+		 list = new LinkedList<>(); 
 	}
 
 	
@@ -20,7 +21,7 @@ public class Polynomial {
 	 * @return polynomial with added term
 	 */
 	public void addTerm(double coeff) {
-		//FIXME
+		 list.add(coeff);
 	}
 	
 	/*
@@ -29,8 +30,31 @@ public class Polynomial {
 	 * Cx^N + Cx^N-1 + ... + Cx + C
 	 */
 	public String toString() {
-		return ""; //FIXME
+	    StringBuilder sb = new StringBuilder();
+	    for (int i = list.size() - 1; i >= 0; i--) {
+	        double coeff = list.get(i);
+	        if (coeff != 0) {
+	            if (sb.length() > 0) {
+	                sb.append(coeff > 0 ? " + " : " - ");
+	            } else if (coeff < 0) {
+	                sb.append("- ");
+	            }
+	            
+	            if (Math.abs(coeff) != 1 || i == 0) {
+	                sb.append(Math.abs(coeff));  // Add the coefficient, unless it's 1 (or -1)
+	            }
+	            
+	            if (i > 0) {
+	                sb.append("x");
+	                if (i > 1) {
+	                    sb.append("^").append(i);  // Add the power of x
+	                }
+	            }
+	        }
+	    }
+	    return sb.length() > 0 ? sb.toString() : "0";  // If no terms, return "0"
 	}
+
 	
 	/**
 	 * 
@@ -38,14 +62,25 @@ public class Polynomial {
 	 * @return value of polynomial at that x
 	 */
 	public double evaluate(double x) {
-		return 0;//FIXME
+	    double result = 0;
+	    for (int i = 0; i < list.size(); i++) {
+	        result += list.get(i) * Math.pow(x, i);  // Add each term's value at x
+	    }
+	    return result;
 	}
-
 	
 	public Polynomial derivative() {
-		return null;//FIXME
+	    Polynomial derivativePoly = new Polynomial();
+	    
+	    for (int i = 1; i < list.size(); i++) {
+	        double coeff = list.get(i);
+	        double derivativeCoeff = coeff * i;  // Apply the power rule
+	        derivativePoly.addTerm(derivativeCoeff);  // Add the derivative term
+	    }
+	    
+	    return derivativePoly;
 	}
-	
+
 
 	/**
 	 * This is the "equals" method that is called by
